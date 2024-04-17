@@ -18,11 +18,11 @@ public class SchoolModel {
 	@Column
 	private long id;
 	
-	@Column(length = 3, nullable = false)
-	private String CD;
+	@Column(length = 3, nullable = false, name = "CD")
+	private String Cd;
 	
-	@Column(length = 20, nullable = true)
-	private String NAME;
+	@Column(length = 20, nullable = true, name = "NAME")
+	private String Name;
 	
 }
  

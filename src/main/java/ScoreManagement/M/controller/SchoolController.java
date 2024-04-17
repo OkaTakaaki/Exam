@@ -22,8 +22,9 @@ public class SchoolController {
 	@Autowired
 	private SchoolService schoolService;
 	
+	
 	@GetMapping("/schooltop/")
-	public String schooltop(Model model) {
+	public String top(Model model) {
 		model.addAttribute("schoollist", this.schoolService.getSchoolList());
 		return "schooltop";
 	}
@@ -46,6 +47,7 @@ public class SchoolController {
 			redirectAttributes.addFlashAttribute("exception", e.getMessage());
 		}
 		return "redirect:/schooltop/";
+		
 	}
 	
 	@GetMapping("/schooldelete/{id}")
