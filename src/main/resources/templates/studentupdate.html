@@ -38,7 +38,14 @@
                 <label for="isAttend" class="form-label">在学中</label>
                 <input id="isAttend" class="form-control" type="checkbox" th:field="*{isAttend}" >
             </div>
-            <input type="submit" class="w-20 btn btn-primary" value="更新">
+            
+            <div class="mb-3">
+                <p th:if="${#fields.hasErrors('schoolCd')}" th:errors="*{schoolCd}" class="text-danger">SCHOOL_CD Error</p>
+                <label for="schoolCd" class="form-label">在学中</label>
+                <input id="schoolCd" class="form-control" type="hidden" th:field="*{schoolCd}" >
+            </div>
+            
+            <input th:href="@{/student/updatecomplate/}" type="submit" class="w-20 btn btn-primary" value="更新">
         </form>
         <a th:href="@{/studenttop/}" class="btn btn-secondary">一覧に戻る</a>
     </div>

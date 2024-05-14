@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
-	@GetMapping("/")
+	@GetMapping("/top/")
 	public String schooltop(Model model) {
 		return "top";
 	}

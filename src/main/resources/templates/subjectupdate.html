@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>科目を編集</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}"/>
+</head>
+<body>
+    <div class="container">
+        <h1>編集を行う</h1>
+        <form th:action="@{/subject/update/{id}(id=*{id})}" th:object="${subject}" method="POST">
+            <input type="hidden" th:field="*{id}" th:value="*{id}" />
+            <input type="hidden" th:field="*{schoolCd}" th:value="*{schoolCd}" />
+
+            
+            <div class="mb-3">
+                <p th:if="${#fields.hasErrors('cd')}" th:errors="*{cd}" class="text-danger">NO Error</p>
+                <label for="cd" class="form-label">科目コード</label>
+                <input type="text" id="cd" class="form-control" th:field="*{cd}" readonly>
+            </div>
+            <div class="mb-3">
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">NAME Error</p>
+                <label for="name" class="form-label">科目名</label>
+                <input id="name" class="form-control" type="text" th:field="*{name}" required>
+            </div>
+            
+            <input type="submit" class="w-20 btn btn-primary" value="更新">
+        </form>
+        <a th:href="@{/subjecttop/}" class="btn btn-secondary">一覧に戻る</a>
+    </div>
+</body>
+</html>

@@ -3,6 +3,8 @@ package ScoreManagement.M.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ScoreManagement.M.model.StudentModel;
+import ScoreManagement.M.model.TeacherModel;
 import ScoreManagement.M.service.StudentService;
 import io.micrometer.common.lang.NonNull;
 
@@ -25,24 +28,30 @@ public class StudentController {
 	@Autowired
 	private StudentService studentService;
 	
-	@GetMapping("/studenttop/")
-	public String top(Model model) {
-		model.addAttribute("studentlist", this.studentService.getStudentList());
-		return "studenttop";
+	@GetMapping("/studenttop/") // HTTP GETリクエストを"/studenttop/"エンドポイントで処理する
+	public String top(Model model, @AuthenticationPrincipal UserDetails user) { // モデルを受け取る
+	    // 学生の一覧を取得してモデルに追加する
+	    model.addAttribute("studentlist", this.studentService.getResStudentList(user));
+	    // "studenttop"テンプレート名を返す
+	    return "studenttop";
 	}
+
 	
-	@PostMapping("/studenttop/")
-    public String handleListActions(
-            @RequestParam(name = "entYear", required = false) Integer entYear,
-            @RequestParam(name = "classNum", required = false) String classNum,
-            @RequestParam(name = "isAttend", required = false) Boolean isAttend,
-            Model model) {
-        // 検索操作の場合
-        List<StudentModel> students = studentService.filterStudents(entYear, classNum, isAttend);
-        System.out.println("検索結果: " + students);
-        model.addAttribute("searchedStudents", students);
-        return "studenttop"; // 検索結果のテンプレート名を返す
+	@PostMapping("/studenttop/") // HTTP POSTリクエストを"/studenttop/"エンドポイントで処理する
+	public String handleListActions(
+	        @RequestParam(name = "entYear", required = false) Integer entYear, // 入学年をリクエストから取得（オプション）
+	        @RequestParam(name = "classNum", required = false) String classNum, // クラス番号をリクエストから取得（オプション）
+	        @RequestParam(name = "isAttend", required = false) Boolean isAttend, // 出席状況をリクエストから取得（オプション）
+	        Model model, @AuthenticationPrincipal TeacherModel teacher ) { // モデルを受け取る
+	    // 検索操作の場合
+	    // 学生をフィルタリングするためにサービスを呼び出し、フィルタリングされた学生リストを取得
+	    List<StudentModel> students = studentService.filterStudents(entYear, classNum, isAttend, teacher.getSchoolCd());
+	    // モデルにフィルタリングされた学生リストを"studentlist"属性として追加
+	    model.addAttribute("studentlist", students);
+	    // 検索結果のテンプレート名を返す
+	    return "studenttop";
 	}
+
 	
 	@GetMapping("/studentadd/")
 	public ModelAndView add(StudentModel student, ModelAndView model) {
@@ -53,9 +62,9 @@ public class StudentController {
  
 	@PostMapping("/studentadd/")
 	public String add(@Validated @ModelAttribute @NonNull StudentModel student, RedirectAttributes result, ModelAndView model,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user) {
 		try {
-			this.studentService.save(student);
+			this.studentService.save(student,user);
 			redirectAttributes.addFlashAttribute("exception", "");
  
 		} catch (Exception e) {
@@ -87,13 +96,7 @@ public class StudentController {
 	    studentService.update(student);
 		
 	    // studentの一覧画面にリダイレクト
-	    return "redirect:/studenttop/";
+	    return "studentupdatecomplate";
 	}
 	
-	@GetMapping("/delete/{id}")
-	public ModelAndView delete(@PathVariable(name = "id") Long id, StudentModel studentModel, ModelAndView model) {
-		this.studentService.delete(id);
-		model.setViewName("delete");
-		return model;
-	}
 }

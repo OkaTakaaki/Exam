@@ -5,8 +5,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<a class="btn btn-warning" th:href="@{/schooltop/}">学校管理へ</a><br>
-<a class="btn btn-warning" th:href="@{/studenttop/}">学生管理へ</a>
+<th:text="{teacher.name}">
+	<a class="btn btn-warning" th:href="@{/studenttop/}">学生管理へ</a>
+<a class="btn btn-warning" th:href="@{/subjecttop/}">科目管理へ</a>
+<a class="btn btn-warning" th:href="@{/test/}">成績管理へ</a>
+<a class="btn btn-warning" th:href="@{/testlookup/}">成績一覧へ</a>
 
 </body>
 </html>

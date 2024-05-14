@@ -16,21 +16,21 @@ public class StudentModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length = 10, nullable = false, name = "no")
+    @Column(length = 10, nullable = false, name = "NO")
     private String no;
 
-    @Column(length = 10, nullable = true, name = "name")
+    @Column(length = 10, nullable = true, name = "NAME")
     private String name;
 
-    @Column(nullable = true, name = "entYear")
+    @Column(nullable = true, name = "ENT_YEAR")
     private Integer entYear;
 
-    @Column(length = 3, nullable = true, name = "classNum")
+    @Column(length = 3, nullable = true, name = "CLASS_NUM")
     private String classNum;
 
-    @Column(nullable = true, name = "isAttend")
+    @Column(nullable = true, name = "IS_ATTEND")
     private Boolean isAttend;
 
-    @Column(length = 3, nullable = true, name = "schoolCd")
+    @Column(length = 3, nullable = true, name = "SCHOOL_CD")
     private String schoolCd;
 }
