@@ -116,7 +116,7 @@ public class TestService {
     
     public List<TestModel> searchReferences(Integer entYear, String classNum, String subjectCd) {
     	List<TestModel> references = testrepository.findAll();
-    	System.out.println("!!!" + references);
+    	System.out.println("!!" + references);
     	
     	List<StudentModel> studententYear = StudententYear(entYear);
         System.out.println("studententYear" + entYear + "|" + studententYear);
