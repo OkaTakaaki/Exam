@@ -20,7 +20,9 @@ import ScoreManagement.M.model.StudentModel;
 import ScoreManagement.M.model.SubjectModel;
 import ScoreManagement.M.model.TeacherModel;
 import ScoreManagement.M.model.TestModel;
+import ScoreManagement.M.repository.StudentRepository;
 import ScoreManagement.M.repository.SubjectRepository;
+import ScoreManagement.M.repository.TestRepository;
 import ScoreManagement.M.service.StudentService;
 import ScoreManagement.M.service.SubjectService;
 import ScoreManagement.M.service.TestService;
@@ -36,6 +38,11 @@ public class TestController {
 	private StudentService studentService;
 	@Autowired
 	private SubjectRepository subjectRepository;
+	@Autowired
+	private StudentRepository studentRepository;
+	@Autowired
+	private TestRepository testRepository;
+ 
  
 		@GetMapping("/test/")
 		public String index(Model model, @AuthenticationPrincipal UserDetails user) {
@@ -96,19 +103,25 @@ public class TestController {
 		
 		@PostMapping("/testlookup/subjects/")
 	    public String getFilteredReferences(
-	    		//@RequestParam(name = "entYear", required = false) Integer entYear,
+	    		@RequestParam(name = "entYear", required = false) Integer entYear,
 	            @RequestParam(name = "classNum", required = false) String classNum,
 	            @RequestParam(name = "subjectCd", required = false) String subjectCd,
 	            Model model) {
 	        // 検索操作の場合
 			
-			List<TestModel> references = testService.searchReferences(/*entYear, */classNum, subjectCd);
-	        model.addAttribute("subjectslist", references);
-			System.out.println(classNum);
-	        System.out.println(subjectCd);
-	        System.out.println("-----------------");
 	        
 			//listという名前は、controllerの@GetMapping("/test/reference/")　と　templatesのstudentのth:each="item, stat : ${list}"　と同じにする
+	        List<TestModel> references = testService.searchReferences(entYear, classNum, subjectCd);
+	        
+	        List<Integer> entYears = new ArrayList<>(); 
+	        for (int i = 0; i < references.size(); i++) {
+	        	entYears.add(entYear);
+	        }
+	        
+	        System.out.println("----" + entYears+ "---");
+            System.out.println("----" + references+ "---");
+            model.addAttribute("entYearslist", entYears);
+	        model.addAttribute("subjectslist", references);
 	        return "testreference";
 	    }
 		

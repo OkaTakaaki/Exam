@@ -1,5 +1,6 @@
 package ScoreManagement.M.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,16 +114,27 @@ public class TestService {
      }
     
     
-    public List<TestModel> searchReferences(/*Integer entYear, */String classNum, String subjectCd) {
+    public List<TestModel> searchReferences(Integer entYear, String classNum, String subjectCd) {
     	List<TestModel> references = testrepository.findAll();
-    	 
-        // 入学年度で絞り込み
-    	/*
-        if (entYear != null) {
-        	references = repository.findByEntYear(entYear);
+    	System.out.println("!!!" + references);
+    	
+    	List<StudentModel> studententYear = StudententYear(entYear);
+        System.out.println("studententYear" + entYear + "|" + studententYear);
+        
+        List<String> studentNos = new ArrayList<>(); //数値を格納するリストを作成
+        for (StudentModel studentModel : studententYear) {
+        	studentNos.add(studentModel.getNo()); // 各 TestModel オブジェクトから SubjectCd の数値を取得し、リストに追加
         }
-        */
- 
+        System.out.println("StudentModelのstudentNo =" + studentNos);
+        System.out.println("-----------------");
+    	
+    	// entyearで絞り込み
+        if (studentNos != null && !studentNos.isEmpty()) {
+            List<TestModel> entyearTests = testrepository.findByNoIn(studentNos);
+            references.retainAll(entyearTests);
+            System.out.println("!!!" + references);
+        }
+    	 
         // クラス番号で絞り込み
         if (classNum != null && !classNum.isEmpty()) {
             List<TestModel> classNumTests = testrepository.findByClassNum(classNum);
@@ -138,6 +150,17 @@ public class TestService {
         return references;
      }
     
+    public List<StudentModel> StudententYear(Integer entYear) {
+        // 全ての学生を取得
+        List<StudentModel> studententYears = studentRepository.findAll();
+        
+        // 入学年度で絞り込み
+        if (entYear != null) {
+        	studententYears = studentRepository.findByEntYear(entYear);  
+        }
+        return studententYears;
+        }
+    
     
     public List<TestModel> searchStudentNos(String studentNo) {
     	List<TestModel> references = testrepository.findAll();
@@ -147,9 +170,7 @@ public class TestService {
             List<TestModel> studentNoTests = testrepository.findByStudentNo(studentNo);
             references.retainAll(studentNoTests);
         }
- 
-
-
         return references;
      }
+    
 }

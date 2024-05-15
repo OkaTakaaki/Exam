@@ -94,7 +94,7 @@
   <main>
     <form th:action="@{/testlookup/subjects/}" method="post">
       <div class="form-row">
-        <!--div class="form-group col-md-4">
+        <div class="form-group col-md-4">
     	<label for="entYear">入学年度:</label>
     	<select class="form-control" id="entYear" name="entYear" th:value="${entYear}">
 				<option value=""></option>
@@ -120,7 +120,7 @@
 				<option value="2033">2033</option>
 				<option value="2034">2034</option>
     	</select>
-		</div-->
+		</div>
  
         <div class="form-group col-md-4">
           <label for="classNum">クラス番号:</label>
@@ -159,19 +159,22 @@
      <div class="table-responsive small">
         <table class="table table-striped table-sm">
           <thead>
+			  
             <tr th:if="${not #lists.isEmpty(subjectslist)}">
-<!--	            <th>入学年度</th>-->
+	            <th>入学年度</th>
 				<th>クラス</th>
 				<th>学生番号</th>
 <!--				<th>氏名</th>-->
+				<th>回数</th>
             </tr>
           </thead>
           <tbody>
-				<tr class="align-middle" th:each="item, stat : ${subjectslist}" th:object="${item}">
-<!--					<td th:text="*{entYear}"></td>-->
-					<td th:text="*{classNum}"></td>
-					<td th:text="*{studentNo}"></td>
-<!--					<td th:text="*{name}"></td>-->
+			  <tr class="align-middle" th:each="item, stat : ${subjectslist}">
+					
+					<td th:text="${entYearslist[stat.index]}"></td>
+					<td th:text="${item.classNum}"></td>
+					<td th:text="${item.studentNo}"></td>
+					<td th:text="${item.no}"></td>
 				</tr>
 			</tbody>
         </table>
