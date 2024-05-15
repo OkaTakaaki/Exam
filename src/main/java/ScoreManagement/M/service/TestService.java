@@ -132,7 +132,7 @@ public class TestService {
         if (studentNos != null && !studentNos.isEmpty()) {
             List<TestModel> entyearTests = testrepository.findByNoIn(studentNos);
             references.retainAll(entyearTests);
-            System.out.println("!!!" + references);
+            System.out.println("!!" + references);
         }
     	 
         // クラス番号で絞り込み
