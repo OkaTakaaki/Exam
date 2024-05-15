@@ -82,6 +82,10 @@
 <link href="dashboard.css" rel="stylesheet">
 </head>
 <body>
+	<header>
+	<a class="btn btn-warning" th:href="@{/logout/}">ログアウト</a>
+	<a class="btn btn-warning" th:href="@{/top/}">TOPへ</a>
+	</header>
 <div class="container">
   <main>
     <form th:action="@{/studenttop/}" method="post">
